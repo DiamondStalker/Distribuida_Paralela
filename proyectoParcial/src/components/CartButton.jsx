@@ -4,6 +4,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import { FaCartPlus } from 'react-icons/fa';
 import ShoppingCart from './shoppingCart';
 import SummarySelecter from './SummarySelecter';
+import '../styles/title.css';
 
 const CartButton = ({
 	cartCounter,
@@ -14,7 +15,7 @@ const CartButton = ({
 	setlistProducts,
 	pay,
 	setpay,
-	calculatePay
+	calculatePay,
 }) => {
 	const [show, setShow] = useState(false);
 
@@ -36,10 +37,17 @@ const CartButton = ({
 					style={{ width: '100%', height: 'auto' }}
 				>
 					<Offcanvas.Header closeButton>
-						<Offcanvas.Title>List Products Selected</Offcanvas.Title>
+						<Offcanvas.Title>
+							<center>
+								{' '}
+								<div className='title'>
+									<h1>List Products Selected</h1>
+								</div>{' '}
+							</center>
+						</Offcanvas.Title>
 					</Offcanvas.Header>
 					<Offcanvas.Body>
-						<div style={{width:"70%"}}>
+						<div style={{ width: '70%' }}>
 							{productsSelected.map(tempProd => (
 								<div key={tempProd.id} id={tempProd.id}>
 									<ShoppingCart
@@ -60,7 +68,14 @@ const CartButton = ({
 							))}
 						</div>
 
-						<div style={{width:"20%",marginLeft:"80%",borderLeft: '10px solid white',boxShadow:"-10px 0px rgb(0, 0,0, .1)"}}>
+						<div
+							style={{
+								width: '20%',
+								marginLeft: '80%',
+								borderLeft: '10px solid white',
+								boxShadow: '-10px 0px rgb(0, 0,0, .1)',
+							}}
+						>
 							<SummarySelecter
 								listProducts={listProducts}
 								setlistProducts={setlistProducts}

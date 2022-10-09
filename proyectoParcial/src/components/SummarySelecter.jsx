@@ -24,7 +24,7 @@ const SummarySelecter = ({
 	const [cupon, setCupon] = useState(0)
 
 	const handleInput = ({target}) => {
-		console.log(target.value)
+		//console.log(target.value)
 		target.value == "" ? setCupon(0):    parseInt(target.value) > 0 && parseInt(target.value) <= 100 ? setCupon(target.value) : setCupon(0)
 	};
 

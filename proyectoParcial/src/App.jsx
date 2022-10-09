@@ -70,7 +70,7 @@ const App = () => {
 			});
 
 			setpay(payresult);
-			console.log(payresult);
+			//console.log(payresult);
 		}, 500);
 	};
 
