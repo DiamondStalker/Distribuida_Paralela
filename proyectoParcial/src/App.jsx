@@ -43,6 +43,15 @@ const App = () => {
 			url_imagen:
 				'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/dd30bba7-ae65-4fc3-975c-454f9b8d7ddd/zoom-freak-4-zapatillas-de-baloncesto-8Hdw9M.png',
 		},
+		{
+			id: '5u',
+			Nombre: 'Zoom Freak 4',
+			Precio: 150,
+			Cantidad_disponible: 3,
+			Descripción: 'Really good Nike shoes',
+			url_imagen:
+				'https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/dd30bba7-ae65-4fc3-975c-454f9b8d7ddd/zoom-freak-4-zapatillas-de-baloncesto-8Hdw9M.png',
+		},
 	];
 
 	const [cartCounter, setcartCounter] = useState(0);
