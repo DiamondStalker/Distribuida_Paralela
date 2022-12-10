@@ -16,9 +16,23 @@ const getCards = async deckId => {
 	return data?.cards;
 };
 
+/**
+ * Number of cards in the remaining stock
+ * @param {String} deckId Id current game
+ * @returns {int} remaining cards
+ */
+const validateRemainingCards = async deckId => {
+	const url = `${ENV.BASE_API}/${deckId}/draw/?count=0`;
+	const res = await fetch(url);
+	const data = await res.json();
+	return data?.remaining;
+
+}
+
 const DeckOfCardsAPI = {
 	getIdGame,
 	getCards,
+	validateRemainingCards
 };
 
 export default DeckOfCardsAPI;

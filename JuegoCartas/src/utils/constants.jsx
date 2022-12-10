@@ -4,7 +4,7 @@ export const ENV = {
     BASE_PATH: `https://${SERVER_IP}`,
     BASE_API: `https://${SERVER_IP}/api/deck`,
     API_ROUTES: {
-        NEW_GAME : "new/shuffle/?deck_count=10"
+        NEW_GAME : "new/shuffle/?deck_count=1"
     }
 }
 
