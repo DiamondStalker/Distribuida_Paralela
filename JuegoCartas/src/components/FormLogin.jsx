@@ -7,9 +7,11 @@ import Row from 'react-bootstrap/Row';
 import { TfiGame } from 'react-icons/tfi';
 import { useNavigate } from 'react-router-dom';
 import useGame from '../hooks/useGame';
+import AlertContains from './AlertContains';
+
 
 const FormLogin = () => {
-	const { playerOne, setPlayerOne, playerTwo, setPlayerTwo, playGame } =
+	const { playerOne, setPlayerOne, playerTwo, setPlayerTwo, playGame,alert,setAlert } =
 		useGame();
 	const [validated, setValidated] = useState(false);
 	const navigate = useNavigate();
@@ -20,11 +22,22 @@ const FormLogin = () => {
 	const handlerInputPlayerTwo = e => {
 		setPlayerTwo({ ...playerTwo, name: e.target.value });
 	};
+
+	/**
+	 * ### Validation
+	 * Event that controls that no field is empty
+	 * Two cases are presented:
+	 * - #### Information of the field is empty : Message that a field is empty
+	 * - #### The field information is filled in : We start a new game and redirect to the game 
+	 * 
+	 * @param {Domm} event action of the button
+	 */
 	const handleSubmit = async event => {
 		event.preventDefault();
 		const form = event.currentTarget;
 		if (form.checkValidity() === false) {
 			console.log(form);
+			setAlert(true);
 		} else {
 			await playGame();
 			navigate('/game', { replace: true });
@@ -32,49 +45,50 @@ const FormLogin = () => {
 		setValidated(true);
 	};
 	return (
-		<Form noValidate validated={validated} onSubmit={handleSubmit}>
-			<Row className='mb-3'>
-				<Form.Group as={Col} md='4' controlId='validationCustomPlayerOne'>
-					<Form.Label>Player One</Form.Label>
-					<InputGroup hasValidation>
-						<InputGroup.Text id='inputGroupPrepend'>
-							<TfiGame />
-						</InputGroup.Text>
-						<Form.Control
-							type='text'
-							placeholder='Player One'
-							aria-describedby='inputGroupPrepend'
-							value={playerOne.name}
-							onChange={handlerInputPlayerOne}
-							required
-						/>
-						<Form.Control.Feedback type='invalid'>
-							Please choose a Player One.
-						</Form.Control.Feedback>
-					</InputGroup>
-				</Form.Group>
-				<Form.Group as={Col} md='4' controlId='validationCustomPlayerTwo'>
-					<Form.Label>Player Two</Form.Label>
-					<InputGroup hasValidation>
-						<InputGroup.Text id='inputGroupPrepend'>
-							<TfiGame />
-						</InputGroup.Text>
-						<Form.Control
-							type='text'
-							placeholder='Player Two'
-							aria-describedby='inputGroupPrepend'
-							required
-							value={playerTwo.name}
-							onChange={handlerInputPlayerTwo}
-						/>
-						<Form.Control.Feedback type='invalid'>
-							Please choose a Player Two.
-						</Form.Control.Feedback>
-					</InputGroup>
-				</Form.Group>
-			</Row>
-			<Button type='submit'>Login</Button>
-		</Form>
+			<Form noValidate validated={validated} onSubmit={handleSubmit}>
+				<AlertContains/>
+				<Row className='mb-3'>
+					<Form.Group as={Col} md='4' controlId='validationCustomPlayerOne'>
+						<Form.Label>Player One</Form.Label>
+						<InputGroup hasValidation>
+							<InputGroup.Text id='inputGroupPrepend'>
+								<TfiGame />
+							</InputGroup.Text>
+							<Form.Control
+								type='text'
+								placeholder='Player One'
+								aria-describedby='inputGroupPrepend'
+								value={playerOne.name}
+								onChange={handlerInputPlayerOne}
+								required
+							/>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a Player Ones.
+							</Form.Control.Feedback>
+						</InputGroup>
+					</Form.Group>
+					<Form.Group as={Col} md='4' controlId='validationCustomPlayerTwo'>
+						<Form.Label>Player Two</Form.Label>
+						<InputGroup hasValidation>
+							<InputGroup.Text id='inputGroupPrepend'>
+								<TfiGame />
+							</InputGroup.Text>
+							<Form.Control
+								type='text'
+								placeholder='Player Two'
+								aria-describedby='inputGroupPrepend'
+								required
+								value={playerTwo.name}
+								onChange={handlerInputPlayerTwo}
+							/>
+							<Form.Control.Feedback type='invalid'>
+								Please choose a Player Two.
+							</Form.Control.Feedback>
+						</InputGroup>
+					</Form.Group>
+				</Row>
+				<Button type='submit'>Login</Button>
+			</Form>
 	);
 };
 

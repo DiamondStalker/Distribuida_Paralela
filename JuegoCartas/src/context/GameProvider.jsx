@@ -7,6 +7,11 @@ const GameProvider = ({ children }) => {
 	const [win, setWin] = useState(false);
 	const [showToast, setShowToast] = useState(false);
 	const [winName, setWinName] = useState('');
+	const [alert,setAlert] = useState(false);
+
+
+	/* --------------------------------- PLAYERS -------------------------------- */
+
 	const [playerOne, setPlayerOne] = useState({
 		name: '',
 		cards: [],
@@ -15,6 +20,8 @@ const GameProvider = ({ children }) => {
 		name: '',
 		cards: [],
 	});
+
+	/* ---------------------------------- INIT ---------------------------------- */
 
 	/**
 	 * @async {DeckOfCardsAPI} Peticion que crea un juego nuevo 
@@ -61,6 +68,8 @@ const GameProvider = ({ children }) => {
 				showToast,
 				setShowToast,
 				winName,
+				alert,
+				setAlert
 			}}
 		>
 			{children}
