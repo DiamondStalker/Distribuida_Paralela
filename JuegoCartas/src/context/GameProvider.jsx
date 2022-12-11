@@ -180,7 +180,7 @@ const GameProvider = ({ children }) => {
 				setWin(true);
 				setShowToast(true);
 				setWinName(playerTwo.name);
-
+//
 				Swal.fire({
 					icon: 'success',
 					title: 'Player 2 has won',
