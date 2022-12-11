@@ -3,7 +3,7 @@ import DeckOfCardsAPI from '../services/deckofcardsapi';
 import GameContext from './GameContext';
 import Swal from 'sweetalert2';
 import 'animate.css';
-import { sortCards , validateCollectCards } from '../components/CardsForm.form';
+import { sortCards, validateCollectCards , calculateUrlImg } from '../components/CardsForm.form';
 
 const GameProvider = ({ children }) => {
 	const [idGame, setIdGame] = useState(null);
@@ -37,9 +37,9 @@ const GameProvider = ({ children }) => {
 			12: [],
 			13: []
 		},
-		threesomes1: false,
-		threesomes2:false,
-		quartet:false,
+		threesomes1: {},
+		threesomes2: {},
+		quartet: {},
 	});
 	const [playerTwo, setPlayerTwo] = useState({
 		name: '',
@@ -64,9 +64,9 @@ const GameProvider = ({ children }) => {
 			12: [],
 			13: []
 		},
-		threesomes1: false,
-		threesomes2:false,
-		quartet:false,
+		threesomes1: {},
+		threesomes2: {},
+		quartet: {},
 	});
 
 	/* ---------------------------------- INIT ---------------------------------- */
@@ -120,42 +120,80 @@ const GameProvider = ({ children }) => {
 				console.log(
 					'Los jugadores ya tienen 10 cartas y no pueden tener mas de 10'
 				);
-			} else {
-				setPlayerOne({
-					...playerOne,
-					cards: [...playerOne.cards, cards[0]],
-					currentCards: (() => {
-						return playerOne.currentCards + 1;
-					})(),
-				});
-				setPlayerTwo({
-					...playerTwo,
-					cards: [...playerTwo.cards, cards[1]],
-					currentCards: (() => {
-						return playerTwo.currentCards + 1;
-					})(),
-				});
 			}
+
+			setPlayerOne({
+				...playerOne,
+				cards: [...playerOne.cards, cards[0]],
+				currentCards: (() => {
+					return playerOne.currentCards + 1;
+				})(),
+			});
+			setPlayerTwo({
+				...playerTwo,
+				cards: [...playerTwo.cards, cards[1]],
+				currentCards: (() => {
+					return playerTwo.currentCards + 1;
+				})(),
+			});
+
 
 			await sortCards(playerOne, cards[0]);
 			await sortCards(playerTwo, cards[1]);
 
 
-			await validateCollectCards(playerOne)
+			await validateCollectCards(playerOne);
+			await validateCollectCards(playerTwo);
 
-			// const findCardPlayerOne = playerOne.cards.find(
-			// 	card => card.value === cards[0].value
-			// );
 
-			// const findCardPlayerTwo = playerTwo.cards.find(
-			// 	card => card.value === cards[1].value
-			// );
+			if (Object.keys(playerOne.threesomes1).length !== 0 && Object.keys(playerOne.threesomes2).length !== 0 && Object.keys(playerOne.quartet).length !== 0) {
+				setWin(true);
+				setShowToast(true);
+				setWinName(playerOne.name);
 
-			// if (findCardPlayerOne || findCardPlayerTwo) {
-			// 	setWin(true);
-			// 	setShowToast(true);
-			// 	setWinName(findCardPlayerOne ? playerOne.name : playerTwo.name);
-			// }
+				Swal.fire({
+					icon: 'success',
+					title: 'Winner',
+					text: `El jugador ${playerOne.name} es el ganador`,
+					html : `<h1>Player name ${playerOne.name}</h1> <hr>threesomes1 ${calculateUrlImg(playerOne.threesomes1)} <br> threesomes2 ${calculateUrlImg(playerOne.threesomes2)} <br> quartet ${calculateUrlImg(playerOne.quartet)} <br>`,
+					showConfirmButton: true,
+					timer: 10000,
+					showClass: {
+						popup: 'animate__animated animate__fadeInDown',
+					},
+					hideClass: {
+						popup: 'animate__animated animate__fadeOutUp',
+					},
+				}).then(result => {
+					if (result.isDismissed || result.isConfirmed) {
+						window.location = window.location.origin;
+					}
+				});
+
+			}else if (Object.keys(playerTwo.threesomes1).length !== 0 && Object.keys(playerTwo.threesomes2).length !== 0 && Object.keys(playerTwo.quartet).length !== 0) {
+				setWin(true);
+				setShowToast(true);
+				setWinName(playerTwo.name);
+
+				Swal.fire({
+					icon: 'success',
+					title: 'Winner',
+					text: `<h1>Player name ${playerTwo.name}</h1> <hr>El jugador ${playerTwo.name} es el ganador <br> jajaj`,
+					html : ` threesomes1 ${calculateUrlImg(playerTwo.threesomes1)} <br> threesomes2 ${calculateUrlImg(playerTwo.threesomes2)} <br> quartet ${calculateUrlImg(playerTwo.quartet)} <br>`,
+					showConfirmButton: true,
+					timer: 10000,
+					showClass: {
+						popup: 'animate__animated animate__fadeInDown',
+					},
+					hideClass: {
+						popup: 'animate__animated animate__fadeOutUp',
+					},
+				}).then(result => {
+					if (result.isDismissed || result.isConfirmed) {
+						window.location = window.location.origin;
+					}
+				});
+			}
 		}
 	};
 
