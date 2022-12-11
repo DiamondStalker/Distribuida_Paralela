@@ -168,7 +168,11 @@ export async function validateCollectCards(player) {
     });
     return tempInfo
 }
-
+/**
+ * 
+ * @param {Object} list of winning cards
+ * @returns String with the html of the calculated images
+ */
 export function calculateUrlImg(list) {
 
     const key = Object.keys(list).shift()
