@@ -3,6 +3,7 @@ import DeckOfCardsAPI from '../services/deckofcardsapi';
 import GameContext from './GameContext';
 import Swal from 'sweetalert2';
 import 'animate.css';
+import { sortCards , validateCollectCards } from '../components/CardsForm.form';
 
 const GameProvider = ({ children }) => {
 	const [idGame, setIdGame] = useState(null);
@@ -17,11 +18,55 @@ const GameProvider = ({ children }) => {
 		name: '',
 		cards: [],
 		currentCards: 0,
+		listCards: {
+			SPADES: [],
+			DIAMONDS: [],
+			HEARTS: [],
+			CLUBS: [],
+			1: [],
+			2: [],
+			3: [],
+			4: [],
+			5: [],
+			6: [],
+			7: [],
+			8: [],
+			9: [],
+			10: [],
+			11: [],
+			12: [],
+			13: []
+		},
+		threesomes1: false,
+		threesomes2:false,
+		quartet:false,
 	});
 	const [playerTwo, setPlayerTwo] = useState({
 		name: '',
 		cards: [],
 		currentCards: 0,
+		listCards: {
+			SPADES: [],
+			DIAMONDS: [],
+			HEARTS: [],
+			CLUBS: [],
+			1: [],
+			2: [],
+			3: [],
+			4: [],
+			5: [],
+			6: [],
+			7: [],
+			8: [],
+			9: [],
+			10: [],
+			11: [],
+			12: [],
+			13: []
+		},
+		threesomes1: false,
+		threesomes2:false,
+		quartet:false,
 	});
 
 	/* ---------------------------------- INIT ---------------------------------- */
@@ -35,17 +80,20 @@ const GameProvider = ({ children }) => {
 	};
 
 	/**
-	 * Se realiza peticion a la api
-	 * la cual devovlera 2 cartas las cuales seran
-	 * repartidas entre ambos jugadores
+	 * Request is made to api
+	 * which will return 2 cards which will be
+	 * shared by both players
 	 */
 	const requestCards = async () => {
-console.log(idGame)
 		if (idGame == null || !idGame) {
-			window.location = window.location.origin
+			window.location = window.location.origin;
 		}
 
-		const currentreRemainingCards = await DeckOfCardsAPI.validateRemainingCards(idGame)
+		const currentreRemainingCards = await DeckOfCardsAPI.validateRemainingCards(
+			idGame
+		);
+
+		/* ------------------- Si ya no hay mas cartas en el maso ------------------- */
 		if (currentreRemainingCards === 0) {
 			Swal.fire({
 				icon: 'info',
@@ -53,18 +101,26 @@ console.log(idGame)
 				showConfirmButton: true,
 				timer: 2500,
 				showClass: {
-					popup: 'animate__animated animate__fadeInDown'
+					popup: 'animate__animated animate__fadeInDown',
 				},
 				hideClass: {
-					popup: 'animate__animated animate__fadeOutUp'
-				}
-			}).then((result) => {
+					popup: 'animate__animated animate__fadeOutUp',
+				},
+			}).then(result => {
 				if (result.isDismissed || result.isConfirmed) {
-					window.location = window.location.origin
+					window.location = window.location.origin;
 				}
 			});
 		} else {
-				const cards = await DeckOfCardsAPI.getCards(idGame);
+
+			/* ------------------ Aun hay cartas en el maso para jugar ------------------ */
+			const cards = await DeckOfCardsAPI.getCards(idGame);
+
+			if (playerOne.currentCards === 10) {
+				console.log(
+					'Los jugadores ya tienen 10 cartas y no pueden tener mas de 10'
+				);
+			} else {
 				setPlayerOne({
 					...playerOne,
 					cards: [...playerOne.cards, cards[0]],
@@ -79,20 +135,27 @@ console.log(idGame)
 						return playerTwo.currentCards + 1;
 					})(),
 				});
+			}
 
-				const findCardPlayerOne = playerOne.cards.find(
-					card => card.value === cards[0].value
-				);
+			await sortCards(playerOne, cards[0]);
+			await sortCards(playerTwo, cards[1]);
 
-				const findCardPlayerTwo = playerTwo.cards.find(
-					card => card.value === cards[1].value
-				);
 
-				if (findCardPlayerOne || findCardPlayerTwo) {
-					setWin(true);
-					setShowToast(true);
-					setWinName(findCardPlayerOne ? playerOne.name : playerTwo.name);
-				}
+			await validateCollectCards(playerOne)
+
+			// const findCardPlayerOne = playerOne.cards.find(
+			// 	card => card.value === cards[0].value
+			// );
+
+			// const findCardPlayerTwo = playerTwo.cards.find(
+			// 	card => card.value === cards[1].value
+			// );
+
+			// if (findCardPlayerOne || findCardPlayerTwo) {
+			// 	setWin(true);
+			// 	setShowToast(true);
+			// 	setWinName(findCardPlayerOne ? playerOne.name : playerTwo.name);
+			// }
 		}
 	};
 
